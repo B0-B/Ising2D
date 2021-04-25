@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <body style="background: #383838; color:aliceblue">
+        <div style="height: 600px; width: 600px;">
+            <script>
+                /* Ising Model in 2D with Periodic Boundaries */
+                // ---- parameters ----
+                var     T = 300, // temperature in Kelvin
+                        J = 1.0; // coupling constant
+                const   K = 1.0, // Boltzmann Constant
+                        L = 200, // matrix size (LxL)
+                        I = 'hot',// init hot/cold
+                        C = ['#d64b7e', '#23594f'], // colors up/down
+                        N = 10e+7;
+                        S = [1,-1]; // spin states
+                        R = 1000; // rendering after how many steps
+                var d=document,p,t,w,m,dH,v,cs, param={'T':T, 'J':J};
+                function u(){return Math.random()}
+                function sleep(ms){return new Promise(function(resolve){setTimeout(()=>{resolve(0)}, ms)})}
+                function choice(arr){return arr[Math.round(u()*(arr.length-1))]}
+                function flip(node){node.value = `${-node.value}`}
+                function mag(){let sum=0;for(let i=0;i<L;i++){for(let j=0;j<L;j++){sum+=parseFloat(m[i][j].value)}}return sum/L**2}
+                p = d.currentScript.parentNode, w = d.createElement('div'), m = [];
+                t = d.createElement('table'); t.style.width = p.style.width; 
+                t.style.height = p.style.width; t.style.fontSize = "0";
+                cs = `${(p.clientWidth/L)}px`; // cell size
+                t.style.display = "inline-block";
+                p.appendChild(w); w.appendChild(t); 
+                t.cellSpacing = '0'; t.style.padding = '0';
+                for (let i = 0; i < L; ++i) {
+                    const row = d.createElement('tr'), r=[]; row.style.borderSpacing='0'; row.style.borderCollapse='collapse'
+                    t.appendChild(row); 
+                    for (let j = 0; j < L; j++) {
+                        const col = d.createElement('td'); col.name = `${j}`;
+                        col.style.display = 'inline-block'; 
+                        col.style.height = cs;
+                        col.style.width = cs;
+                        col.style.padding = "0";
+                        if (I=='hot') {v=choice([0,1])} else {v=1}
+                        col.value = S[v].toString();
+                        row.appendChild(col); r.push(col);
+                    } m.push(r);
+                } 
+                const fd = d.createElement('div');
+                const M = d.createElement('div'); M.id='mag'; fd.appendChild(M);
+                ['T','J'].forEach(x =>{
+                    const xName = x,l = d.createElement('label'),In = d.createElement('input'),out = d.createElement('output');
+                    l.innerHTML=xName; w.appendChild(fd); 
+                    if(x=='T'){In.min="0.001"; In.step="0.01"; In.max="300"}else{In.min="0.0001"; In.step="0.0001"; In.max="10"}
+                    In.type='range'; In.id=xName; In.style.minWidth=t.clientWidth.toString()+'px';
+                    In.value = `${param[x]}`, In.oninput=function(){change(this.value, xName, out)};
+                    l.htmlFor=In.id; out.innerHTML = `${param[x]}`;
+                    [l,In,out,d.createElement('br')].forEach(e=>{fd.appendChild(e)});
+                }); 
+                async function change(val, v, el){console.log(v,val); param[v]=val, el.innerHTML=`${val}`};
+                async function metropolisHastings () { 
+                    const i=Math.floor(u()*(L-1)), j=Math.floor(u()*(L-1)), cell = m[i][j];
+                    dH = -param.J*cell.value*( m[(i+1)%L][j].value + m[(L+i-1)%L][j].value + m[i][(j+1)%L].value + m[i][(L+j-1)%L].value );
+                    if (dH < 0 || u() < Math.exp(-dH/(K*param.T))) {flip(cell)}
+                } async function render () {
+                    console.log('render...')
+                    for (let i = 0; i < L; i++) {for (let j = 0; j < L; j++) {
+                            m[i][j].style.backgroundColor = C[S.indexOf(parseInt(m[i][j].value))]
+                    }} await sleep(10);
+                } async function sim () {
+                    for (let i = 0; i < N; i++) {
+                        await metropolisHastings()
+                        if (i%R==0) {await render(); d.getElementById('mag').innerHTML=`Magnetization: ${mag()}`}
+                    }
+                } sim();
+            </script>
+        </div>
+        
+    </body>
+</html>
