@@ -1,5 +1,5 @@
 # Ising2D
-Live client side Monte Carlo simulation of an 2-dimensional Ising model.
+Live & interactive client side Monte Carlo simulation of a 2-dimensional Ising model.
 
 ## Intro
 This project intended to produce the shortest possible algorithmic code for an Ising2D simulation in 2 dimensions i.e. the highest dimension to have an exact solution that was found by [Onsager](https://journals.aps.org/pr/abstract/10.1103/PhysRev.65.117) in 1944. The numerical method however uses a classical but strongly optimized Metropolis-Hastings algorithm which includes a Neumann rejection method to sample new states from the thermodynamic probability distribution. This allows to simulate the spontaneous magnetization in a (ferromagnetic) material with special interest lying at the point of criticality. Although this distribution consists of rules gained from statistical ensemble physics this algorithm focuses on information only, treating the quantities statistically (like temperature). Hence, a new state is derived (sampled) if it is entropically favorable due to the 2nd law of thermodynamics.
