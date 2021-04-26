@@ -24,7 +24,7 @@
                 function mag(){let sum=0;for(let i=0;i<L;i++){for(let j=0;j<L;j++){sum+=1*m[i][j].value}}return sum/L**2}
                 async function metropolisHastings(){const i=Math.floor(u()*(L-1)),j=Math.floor(u()*(L-1)),cell=m[i][j],
                 dH=2*pm.J*cell.value*(1*m[(i+1)%L][j].value+1*m[(L+i-1)%L][j].value+1*m[i][(j+1)%L].value+
-                1*m[i][(L+j-1)%L].value);if(dH<0||u()<Math.exp(-dH/(K*pm.T))){cell.value*=-1}}
+                1*m[i][(L+j-1)%L].value);if(dH<0||u()<Math.exp(-dH/K/pm.T)){cell.value*=-1}}
                 async function render(){for(let i=0;i<L;i++){for(let j=0;j<L;j++){
                 m[i][j].style.backgroundColor=C[S.indexOf(1*m[i][j].value)]}}await sleep(5)}
                 async function sim(){for(let i=0;i<N;i++){await metropolisHastings()
@@ -41,7 +41,7 @@
                 const fd=d.createElement('div'),M=d.createElement('div');M.id='mag'; fd.appendChild(M);
                 ['T','J'].forEach(x=>{const xName=x,l=d.createElement('label'),In=d.createElement('input'),
                 out=d.createElement('output');l.innerHTML=xName;w.appendChild(fd); 
-                if(x=='T'){In.min="0.001";In.step="0.01";In.max="50"}else{In.min="0.0001";In.step="0.0001";In.max="10"}
+                if(x=='T'){In.min="e-2";In.step="e-2";In.max="50"}else{In.min="e-4";In.step="e-4";In.max="10"}
                 In.type='range';In.id=xName;In.style.minWidth=t.clientWidth.toString()+'px';
                 In.value=`${pm[x]}`,In.oninput=function(){change(this.value,xName,out)};
                 l.htmlFor=In.id;out.innerHTML=`${pm[x]}`;[l,In,out,d.createElement('br')].forEach(
