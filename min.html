@@ -4,7 +4,7 @@
         <div style="height: 600px; width: 600px;">
             <script>
                 /* Ising Model in 2D with Periodic Boundaries */
-                // ================ parameters ===================
+                // ================ pmeters ===================
                 var     T = 1, // temperature in Kelvin
                         J = 1.0; // coupling constant
                 const   K = 1.0, // Boltzmann Constant
@@ -15,18 +15,18 @@
                         S = [1,-1], // spin states
                         R = 1000; // rendering after how many steps
                 /*================================================*/
-
-                var d=document,p,t,w,m,dH,v,cs,param={'T':T,'J':J};
-                function u(){return Math.random()}function flip(node){node.value=`${-node.value}`}
-                async function change(val,v,el){param[v]=val,el.innerHTML=`${val}`};
-                function sleep(ms){return new Promise(function(resolve){setTimeout(()=>{resolve(0)},ms)})}
+            
+                var d=document,p,t,w,m,dH,v,cs,pm={'T':T,'J':J};
+                function u(){return Math.random()}
+                function change(val,v,el){pm[v]=val,el.innerHTML=`${val}`};
+                function sleep(ms){return new Promise(function(r){setTimeout(()=>{r(0)},ms)})}
                 function choice(arr){return arr[Math.round(u()*(arr.length-1))]}
-                function mag(){let sum=0;for(let i=0;i<L;i++){for(let j=0;j<L;j++){sum+=parseFloat(m[i][j].value)}}return sum/L**2}
+                function mag(){let sum=0;for(let i=0;i<L;i++){for(let j=0;j<L;j++){sum+=1*m[i][j].value}}return sum/L**2}
                 async function metropolisHastings(){const i=Math.floor(u()*(L-1)),j=Math.floor(u()*(L-1)),cell=m[i][j],
-                dH=2*param.J*cell.value*(1*m[(i+1)%L][j].value+1*m[(L+i-1)%L][j].value+1*m[i][(j+1)%L].value+
-                1*m[i][(L+j-1)%L].value);if(dH<0||u()<Math.exp(-dH/(K*param.T))){flip(cell)}}
+                dH=2*pm.J*cell.value*(1*m[(i+1)%L][j].value+1*m[(L+i-1)%L][j].value+1*m[i][(j+1)%L].value+
+                1*m[i][(L+j-1)%L].value);if(dH<0||u()<Math.exp(-dH/(K*pm.T))){cell.value*=-1}}
                 async function render(){for(let i=0;i<L;i++){for(let j=0;j<L;j++){
-                m[i][j].style.backgroundColor=C[S.indexOf(parseInt(m[i][j].value))]}}await sleep(5)}
+                m[i][j].style.backgroundColor=C[S.indexOf(1*m[i][j].value)]}}await sleep(5)}
                 async function sim(){for(let i=0;i<N;i++){await metropolisHastings()
                 if(i%R==0){await render();d.getElementById('mag').innerHTML=`Magnetization: ${mag()}`}}} 
                 p=d.currentScript.parentNode,w=d.createElement('div'),m=[];t=d.createElement('table'); 
@@ -43,9 +43,9 @@
                 out=d.createElement('output');l.innerHTML=xName;w.appendChild(fd); 
                 if(x=='T'){In.min="0.001";In.step="0.01";In.max="50"}else{In.min="0.0001";In.step="0.0001";In.max="10"}
                 In.type='range';In.id=xName;In.style.minWidth=t.clientWidth.toString()+'px';
-                In.value=`${param[x]}`,In.oninput=function(){change(this.value,xName,out)};
-                l.htmlFor=In.id;out.innerHTML=`${param[x]}`;[l,In,out,d.createElement('br')].forEach(
-                e=>{fd.appendChild(e)});});sim()//_____Bogdan_Bermel______https://github.com/B0-B/________
+                In.value=`${pm[x]}`,In.oninput=function(){change(this.value,xName,out)};
+                l.htmlFor=In.id;out.innerHTML=`${pm[x]}`;[l,In,out,d.createElement('br')].forEach(
+                e=>{fd.appendChild(e)})});sim()//________https://github.com/B0-B/________
             </script>
         </div>
         
