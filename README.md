@@ -2,7 +2,7 @@
 Live & interactive client side Monte Carlo simulation of a 2-dimensional Ising model. 
 
 
-[Demo](https://codepen.io/b0-b/full/poRGmmv).
+## [Demo](https://codepen.io/b0-b/full/poRGmmv)
 
 
 ## Intro
