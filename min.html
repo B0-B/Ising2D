@@ -15,7 +15,7 @@
                         S = [1,-1], // spin states
                         R = 1000; // rendering after how many steps
                 /*================================================*/
-                var d=document,p,t,w,m=[],dH,v,cs,pm={'T':T,'J':J};
+                var d=document,p,t,w,m=[],dH,v,cs,pm={'T':T,'J':J};//https://github.com/B0-B/
                 function ce(el){return d.createElement(el)}function u(){return Math.random()}
                 function A(){s=0;for(let i=0;i<L;i++){for(let j=0;j<L;j++){s+=1*m[i][j].value}}return s/L/L}
                 async function MH(){const i=Math.floor(u()*(L-1)),j=Math.floor(u()*(L-1)),c=m[i][j],
@@ -31,12 +31,11 @@
                 C.style.padding="0";v=1;if(I=='hot'){v=[0,1][Math.round(u())]}C.value=S[v].toString();
                 row.appendChild(C);r.push(C)}m.push(r)}const fd=ce('div'),M=ce('div');M.id='mag';
                 fd.appendChild(M);['T','J'].forEach(x=>{const xn=x,l=ce('label'),In=ce('input'),
-                out=ce('output');l.innerHTML=xn;w.appendChild(fd);if(x=='T'){In.min="1e-2";
-                In.step="1e-2";In.max="50"}else{In.min="1e-4";In.step="1e-4";In.max="10"}
-                In.type='range';In.id=xn;In.style.minWidth=`${t.clientWidth}px`;In.value=`${pm[x]}`;
-                In.oninput=function(){pm[xn]=this.value;out.innerHTML=`${this.value}`}
-                l.htmlFor=In.id;out.innerHTML=`${pm[x]}`;[l,In,out,ce('br')]
-                .forEach(e=>{fd.appendChild(e)})});sim()//https://github.com/B0-B/
+                out=ce('output');l.innerHTML=xn;w.appendChild(fd);if(x=='T'){In.min="1e-2";In.step="1e-2";
+                In.max="50"}else{In.min="1e-4";In.step="1e-4";In.max="10"}In.type='range';In.id=xn;
+                In.oninput=function(){pm[xn]=this.value;out.innerHTML=`${this.value}`};l.htmlFor=In.id;
+                In.style.minWidth=`${t.clientWidth}px`;In.value=`${pm[x]}`;out.innerHTML=`${pm[x]}`;
+                [l,In,out,ce('br')].forEach(e=>{fd.appendChild(e)})});sim();
             </script>
         </div>
     </body>
