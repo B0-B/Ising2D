@@ -27,30 +27,29 @@ relative to the parent container which should have a fixed width and height.
             S = [1,-1], // spin states
             R = 1000; // rendering after how many steps
     /*================================================*/
-    var d=document,p,t,w,m,dH,v,cs,pm={'T':T,'J':J};function u(){return Math.random()}
+    var d=document,p,t,w,m=[],dH,v,cs,pm={'T':T,'J':J};
+    function ce(el){return d.createElement(el)}function u(){return Math.random()}
     function A(){s=0;for(let i=0;i<L;i++){for(let j=0;j<L;j++){s+=1*m[i][j].value}}return s/L/L}
     async function MH(){const i=Math.floor(u()*(L-1)),j=Math.floor(u()*(L-1)),c=m[i][j],
-    dH=2*pm.J*c.value*(1*m[(i+1)%L][j].value+1*m[(L+i-1)%L][j].value+1*m[i][(j+1)%L].value
-    +1*m[i][(L+j-1)%L].value);if(dH<0||u()<Math.exp(-dH/K/pm.T)){c.value*=-1}}
-    async function render(){for(let i=0;i<L;i++){for(let j=0;j<L;j++){m[i][j].style
-    .backgroundColor=C[S.indexOf(1*m[i][j].value)]}}await new Promise((r)=>{setTimeout(()=>
-    {r(0)},5)})}async function sim(){for(let i=0;i<N;i++){await MH();if(i%R==0)
-    {await render();d.getElementById('mag').innerHTML='Magnetization: '+A()}}} 
-    p=d.currentScript.parentNode,w=d.createElement('div'),m=[];t=d.createElement('table'); 
-    t.style.width=p.style.width;t.style.height=p.style.width;t.style.fontSize="0";
-    cs=`${p.clientWidth/L}px`;t.style.display="inline-block";p.appendChild(w); 
-    w.appendChild(t);t.cellSpacing='0';for(let i=0;i<L;++i){const row=d.createElement('tr'),
-    r=[];row.style.borderSpacing='0';row.style.borderCollapse='collapse';t.appendChild(row);
-    for(let j=0;j<L;j++){const C=d.createElement('td');C.name=`${j}`;C.style.height=cs;
-    C.style.width=cs;C.style.padding="0";v=1;if(I=='hot'){v=[0,1][Math.round(u())]}
-    C.value=S[v].toString();row.appendChild(C);r.push(C)}m.push(r)} 
-    const fd=d.createElement('div'),M=d.createElement('div');M.id='mag';fd.appendChild(M);
-    ['T','J'].forEach(x=>{const xn=x,l=d.createElement('label'),In=d.createElement('input'),
-    out=d.createElement('output');l.innerHTML=xn;w.appendChild(fd); 
-    if(x=='T'){In.min="1e-2";In.step="1e-2";In.max="50"}else{In.min="1e-4";In.step="1e-4";In.max="10"}
-    In.type='range';In.id=xn;In.style.minWidth=`${t.clientWidth}px`;In.value=`${pm[x]}`;
+    dH=2*pm.J*c.value*(1*m[(i+1)%L][j].value+1*m[(L+i-1)%L][j].value+1*m[i][(j+1)%L]
+    .value+1*m[i][(L+j-1)%L].value);if(dH<0||u()<Math.exp(-dH/K/pm.T)){c.value*=-1}}
+    async function sim(){for(let i=0;i<N;i++){await MH();if(i%R==0){for(let i=0;i<L;i++)
+    {for(let j=0;j<L;j++){m[i][j].style.backgroundColor=C[S.indexOf(1*m[i][j].value)]}}
+    await new Promise((r)=>{setTimeout(()=>{r(0)},5)});d.getElementById('mag').innerHTML
+    ='M: '+A()}}}p=d.currentScript.parentNode,w=ce('div');t=ce('table');t.style.width=p.style.width;
+    t.style.height=p.style.width;t.style.fontSize="0";cs=`${p.clientWidth/L}px`;
+    t.style.display="inline-block";p.appendChild(w);w.appendChild(t);t.cellSpacing='0';
+    for(let i=0;i<L;++i){const row=ce('tr'),r=[];row.style.borderSpacing='0';row
+    .style.borderCollapse='collapse';t.appendChild(row);for(let j=0;j<L;j++)
+    {const C=ce('td');C.name=`${j}`;C.style.height=cs;C.style.width=cs;C.style.padding="0";
+    v=1;if(I=='hot'){v=[0,1][Math.round(u())]}C.value=S[v].toString();row.appendChild(C);
+    r.push(C)}m.push(r)}const fd=ce('div'),M=ce('div');M.id='mag';fd.appendChild(M);
+    ['T','J'].forEach(x=>{const xn=x,l=ce('label'),In=ce('input'),out=ce('output');
+    l.innerHTML=xn;w.appendChild(fd);if(x=='T'){In.min="1e-2";In.step="1e-2";In.max="50"}
+    else{In.min="1e-4";In.step="1e-4";In.max="10"}In.type='range';In.id=xn;
+    In.style.minWidth=`${t.clientWidth}px`;In.value=`${pm[x]}`;
     In.oninput=function(){pm[xn]=this.value;out.innerHTML=`${this.value}`}
-    l.htmlFor=In.id;out.innerHTML=`${pm[x]}`;[l,In,out,d.createElement('br')]
+    l.htmlFor=In.id;out.innerHTML=`${pm[x]}`;[l,In,out,ce('br')]
     .forEach(e=>{fd.appendChild(e)})});sim()//________https://github.com/B0-B/
 </script>
 ```
